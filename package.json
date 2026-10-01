@@ -1,0 +1,15 @@
+{
+  "name": "qc-produk",
+  "version": "1.0.0",
+  "description": "QC Produk Darah web app",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -c-1 -p 3000",
+    "dev": "npx http-server -c-1 -p 3000"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

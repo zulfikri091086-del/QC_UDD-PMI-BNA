@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QC Produk Darah - UDD PMI Kota Banda Aceh</title>
+<link rel="stylesheet" href="style.css">
+<style id="pageStyle">@page{size:A4 portrait;margin:12mm}</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">UDD PMI<small>Kota Banda Aceh</small></div>
+    <nav id="nav">
+      <button data-view="dashboard" class="active">Dashboard</button>
+      <button data-view="qc">Input QC Hemolisis</button>
+      <button data-view="mk">Pemeriksaan Makroskopis</button>
+      <button data-view="data">Data Pemeriksaan</button>
+      <button data-view="laporan">Laporan &amp; Print</button>
+      <button data-view="pengaturan">Pengaturan</button>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar"><h1 id="title">Dashboard</h1><button class="btn ghost" id="btnReload">Muat Ulang</button></header>
+
+    <!-- DASHBOARD -->
+    <section id="v-dashboard" class="view active">
+      <div class="stats" id="stats"></div>
+      <div class="grid3">
+        <div class="card"><h3>Pemeriksaan per Bulan</h3><div id="ch1" class="bars"></div></div>
+        <div class="card"><h3>Lulus vs Tidak Lulus</h3><div id="ch2" class="bars"></div></div>
+        <div class="card"><h3>Normal vs Tidak Normal</h3><div id="ch3" class="bars"></div></div>
+      </div>
+    </section>
+
+    <!-- QC -->
+    <section id="v-qc" class="view">
+      <div class="card">
+        <h3 id="qcFormTitle">Input QC Hemolisis</h3>
+        <div class="form">
+          <label>Tanggal Pemeriksaan<input type="date" id="qcTanggal" class="dt"><span class="hint"></span></label>
+          <label>No. Kantong<input id="qcNoKantong" placeholder="mis. WB001"></label>
+          <label>Komponen Darah<select id="qcKomponen"></select></label>
+          <label>Nilai Hb (g/dL)<input type="number" step="any" id="qcHb"></label>
+          <label>Hct (%)<input type="number" step="any" id="qcHct"></label>
+          <label>Hb Low (g/dL)<input type="number" step="any" id="qcHbLow"></label>
+          <label>Nilai Hemolisis (%)<input id="qcHemolisis" readonly></label>
+          <label>Standar (%)<input id="qcStandar" readonly></label>
+          <label>Kesimpulan<div id="qcKesimpulan" class="badge">-</div></label>
+        </div>
+        <div class="actions"><button class="btn" id="qcSave">Simpan QC</button><button class="btn ghost" id="qcReset">Reset</button></div>
+      </div>
+    </section>
+
+    <!-- MAKROSKOPIS -->
+    <section id="v-mk" class="view">
+      <div class="card">
+        <h3 id="mkFormTitle">Pemeriksaan Makroskopis</h3>
+        <h4>A. Data Pemeriksaan</h4>
+        <div class="form">
+          <label>No<input id="mkNo" value="Otomatis" readonly></label>
+          <label>Tanggal Pemeriksaan<input type="date" id="mkTanggal" class="dt"><span class="hint"></span></label>
+          <label>Komponen Darah<select id="mkKomponen"></select></label>
+          <label>No. Kantong<input id="mkNoKantong"></label>
+          <label>Jenis Kantong<select id="mkJenis"></select></label>
+          <label>Golongan Darah<div class="pills" id="mkGol"></div></label>
+          <label>Rhesus<div class="pills" id="mkRh"></div></label>
+          <label>Tanggal Pembuatan<input type="date" id="mkTglBuat" class="dt"><span class="hint"></span></label>
+          <label>Tanggal Kadaluarsa<input type="date" id="mkTglExp" class="dt"><span class="hint"></span></label>
+        </div>
+        <h4>B. Pemeriksaan Fisik / Makroskopis</h4>
+        <div class="form">
+          <label>Penimbangan<div class="unit"><input type="number" step="any" id="mkPenimbangan"><b>g</b></div></label>
+          <label>Mean<div class="unit"><input type="number" step="any" id="mkMean"><b>g</b></div></label>
+          <label>Keterangan<select id="mkKet"></select></label>
+          <label id="mkKetLainWrap" class="hide">Keterangan Tambahan<textarea id="mkKetLain" rows="2"></textarea></label>
+        </div>
+        <h4>C. Pemeriksaan Hemolisis (Makroskopis)</h4>
+        <div class="form">
+          <label>Hemolisis<select id="mkHem"><option>Tidak Ada</option><option>Ada</option></select></label>
+          <label>Mean<input type="number" step="any" id="mkMeanHem"></label>
+        </div>
+        <h4>D. Petugas</h4>
+        <div class="form"><label>Pemeriksa<select id="mkPemeriksa"></select></label></div>
+        <div class="actions"><button class="btn" id="mkSave">Simpan Makroskopis</button><button class="btn ghost" id="mkReset">Reset</button></div>
+      </div>
+    </section>
+
+    <!-- DATA -->
+    <section id="v-data" class="view">
+      <div class="card">
+        <div class="filters">
+          <input id="fSearch" placeholder="Cari No Kantong / komponen / gol. darah / pemeriksa / kesimpulan QC">
+          <input type="date" id="fFrom" title="Dari tanggal"><input type="date" id="fTo" title="Sampai tanggal">
+          <input type="month" id="fMonth" title="Bulan">
+          <button class="btn ghost" id="fClear">Hapus Filter</button>
+        </div>
+        <div class="tbl"><table id="dataTable"><thead><tr><th>No</th><th>Tanggal</th><th>No Kantong</th><th>Komponen</th><th>Gol. Darah</th><th>QC Hemolisis</th><th>Kesimpulan QC</th><th>Makroskopis</th><th>Keterangan</th><th>Pemeriksa</th><th>Aksi</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- LAPORAN -->
+    <section id="v-laporan" class="view">
+      <div class="card">
+        <div class="filters">
+          <label>Dari<input type="date" id="rFrom"></label><label>Sampai<input type="date" id="rTo"></label>
+          <label>Bulan<input type="month" id="rMonth"></label>
+          <label>Komponen<select id="rKomponen"></select></label>
+          <label>No Kantong<input id="rNoKantong"></label>
+          <label>Pemeriksa<select id="rPemeriksa"></select></label>
+          <label>Kertas<select id="rOrient"><option value="portrait">A4 Portrait</option><option value="landscape">A4 Landscape</option></select></label>
+        </div>
+        <div class="actions"><button class="btn" id="rShow">Tampilkan Preview</button><button class="btn" id="rPrint">Print Laporan</button><button class="btn ghost" id="rPrintDetail">Print Detail</button></div>
+      </div>
+      <div class="card"><div id="preview" class="paper"><p class="muted">Pilih filter lalu klik "Tampilkan Preview".</p></div></div>
+    </section>
+
+    <!-- PENGATURAN -->
+    <section id="v-pengaturan" class="view">
+      <div class="card">
+        <div class="form">
+          <label class="full">URL Web App Google Apps Script (/exec)<input id="sUrl" placeholder="https://script.google.com/macros/s/.../exec"></label>
+          <label>Standar Hemolisis (%)<input type="number" step="any" id="sStandar"></label>
+          <label>Daftar Pemeriksa (satu per baris)<textarea id="sPemeriksa" rows="5"></textarea></label>
+          <label>Daftar Jenis Kantong (satu per baris)<textarea id="sJenis" rows="5"></textarea></label>
+          <label>Penanggung Jawab Mutu (nama)<input id="sPenanggung" placeholder="Nama Penanggung Jawab Mutu"></label>
+        </div>
+        <div class="actions"><button class="btn" id="sSave">Simpan Pengaturan</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="printArea"></div>
+<div id="modal" class="modal"><div class="modal-box"><div id="modalBody"></div><div class="actions" id="modalActions"></div></div></div>
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
